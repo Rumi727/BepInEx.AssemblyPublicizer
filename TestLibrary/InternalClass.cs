@@ -10,6 +10,16 @@ internal class InternalClass
     private int PrivateProperty => 1;
 
     private int PrivateAutoProperty { get; set; }
+
+    private event Action? PrivateEvent;
+
+    internal event Action? InternalEvent;
+
+    protected event Action? ProtectedEvent;
+
+    protected internal event Action? ProtectedInternalEvent;
+
+    private protected event Action? PrivateProtectedEvent;
 }
 
 public class SecondClass

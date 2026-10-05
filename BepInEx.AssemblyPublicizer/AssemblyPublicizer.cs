@@ -75,7 +75,8 @@ public static class AssemblyPublicizer
                 Publicize(methodDefinition, attribute, options);
             }
 
-            // Special case for accessors generated from auto properties, publicize them regardless of PublicizeCompilerGenerated
+            // Special case for compiler-generated accessors of source-declared properties and events,
+            // publicize them regardless of PublicizeCompilerGenerated.
             if (!options.PublicizeCompilerGenerated)
             {
                 foreach (var propertyDefinition in typeDefinition.Properties)
@@ -84,6 +85,14 @@ public static class AssemblyPublicizer
 
                     if (propertyDefinition.GetMethod is { } getMethod) Publicize(getMethod, attribute, options, true);
                     if (propertyDefinition.SetMethod is { } setMethod) Publicize(setMethod, attribute, options, true);
+                }
+
+                foreach (var eventDefinition in typeDefinition.Events)
+                {
+                    if (eventDefinition.IsCompilerGenerated()) continue;
+
+                    if (eventDefinition.AddMethod is { } addMethod) Publicize(addMethod, attribute, options, true);
+                    if (eventDefinition.RemoveMethod is { } removeMethod) Publicize(removeMethod, attribute, options, true);
                 }
             }
         }
